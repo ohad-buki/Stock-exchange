@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <div class="page-box">
+        <div class="input-group">
+          <input
+            type="search"
+            class="form-control rounded"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <button type="button" class="btn">search</button>
+        </div>
+        <div class="spinner-border d-none" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="search-results col">
+          <ul class="list-group list-group-flush"></ul>
+        </div>
+      </div>
+    </div>
+    <script src="./javaScript/index.js"></script>
+  </body>
+</html>
