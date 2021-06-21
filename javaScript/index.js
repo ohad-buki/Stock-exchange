@@ -1,7 +1,9 @@
 const button = document.querySelector(".btn");
 const searchBar = document.querySelector(".form-control");
-const ul = document.querySelector(".list-group");
+const results = document.querySelector(".search-results");
 const spinner = document.querySelector(".spinner-border");
+const ul = document.createElement("ul");
+ul.classList.add("list-group", "list-group-flush");
 
 async function getResults() {
   const res = await fetch(
@@ -14,12 +16,10 @@ function addToScreen() {
   spinner.classList.remove("d-none");
   getResults().then((data) => {
     for (let i = 0; i <= 10; i++) {
-      const li = document.createElement("li");
-      li.classList.add("list-group-item");
-      li.innerHTML = `<a href="./html/company.html?symbol=${data[i].symbol}" class="link-primary">${data[i].name},(${data[i].symbol})</a></a>`;
-      ul.appendChild(li);
-      spinner.classList.add("d-none");
+      ul.innerHTML += `<li><a href="./html/company.html?symbol=${data[i].symbol}" class="link-primary list-group-item">${data[i].name},(${data[i].symbol})</a></li>`;
     }
+    spinner.classList.add("d-none");
+    results.appendChild(ul);
   });
 }
 

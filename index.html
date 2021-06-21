@@ -11,7 +11,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./css/style.css" />
-    <title>Document</title>
+    <title>StockEx</title>
   </head>
   <body>
     <div class="page-wrapper">
@@ -26,12 +26,12 @@
           />
           <button type="button" class="btn">search</button>
         </div>
-        <div class="spinner-border d-none" role="status">
-          <span class="visually-hidden">Loading...</span>
+        <div class="spinner-wrapper">
+          <div class="spinner-border d-none" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
-        <div class="search-results col">
-          <ul class="list-group list-group-flush"></ul>
-        </div>
+        <div class="search-results col"></div>
       </div>
     </div>
     <script src="./javaScript/index.js"></script>

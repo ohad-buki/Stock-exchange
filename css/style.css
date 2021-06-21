@@ -48,8 +48,9 @@ body {
   justify-content: center;
 }
 
-.spinner-border {
-  margin-left: 420px;
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 ul {
@@ -60,4 +61,50 @@ ul {
 
 a {
   text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.logo img {
+  height: 80px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.name {
+  margin-inline-start: 2rem;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.price {
+  margin-bottom: 2rem;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.discription {
+  font-size: 20px;
+}
+
+.char {
+  margin: 2rem 1rem 0 1rem;
 }
