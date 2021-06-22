@@ -28,6 +28,13 @@ body {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.h1-wrapper {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 50px;
+}
+
 .input-group {
   margin-top: 2rem;
   height: 25px;
@@ -46,6 +53,21 @@ body {
 .search-results {
   display: flex;
   justify-content: center;
+}
+
+li img {
+  height: 30px;
+}
+
+.list-price {
+  color: black;
+  font-size: 20px;
+}
+
+.comp-name {
+  margin-inline-start: 1rem;
+  margin-inline-end: 1rem;
+  font-weight: bold;
 }
 
 .spinner-wrapper {
