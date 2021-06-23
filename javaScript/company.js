@@ -27,7 +27,7 @@ async function getHistory() {
   return dataHistory;
 }
 
-function addDataToScreen(d) {
+function addDataToScreen() {
   firstSpinner.classList.remove("d-none");
   getCompanyData().then((data) => {
     let color = "red";

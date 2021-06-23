@@ -9,6 +9,44 @@ body {
   margin: 0;
 }
 
+.marquee-container {
+  width: 100vw;
+  position: absolute;
+  height: 50px;
+  background-color: #394032;
+}
+
+.marquee-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  direction: "left";
+  height: 50px;
+  animation: slide 42s linear infinite;
+  transform: translateX(100%);
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-item {
+  display: flex;
+  flex-direction: row;
+  box-shadow: rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  margin-left: 10px;
+  font-weight: bold;
+  color: white;
+  padding: 5px;
+}
+
 .page-wrapper {
   display: flex;
   justify-content: center;
@@ -22,7 +60,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 70px;
   width: 65%;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -33,6 +71,7 @@ body {
   text-align: center;
   font-weight: bold;
   font-size: 50px;
+  color: #394032;
 }
 
 .input-group {
