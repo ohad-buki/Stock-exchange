@@ -140,14 +140,6 @@ ul {
   height: 80px;
 }
 
-.green {
-  color: green;
-}
-
-.red {
-  color: red;
-}
-
 .header {
   margin-bottom: 2rem;
 }
@@ -170,4 +162,16 @@ ul {
 
 .char {
   margin: 2rem 1rem 0 1rem;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.yellow {
+  background-color: yellow;
 }

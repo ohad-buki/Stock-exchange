@@ -47,8 +47,10 @@ class SearchResults {
             continue;
           }
           if (
-            data[j].symbol.includes(inputElemnt.value) ||
-            data[j].name.includes(inputElemnt.value)
+            data[j].symbol
+              .toUpperCase()
+              .includes(inputElemnt.value.toUpperCase()) ||
+            data[j].name.toUpperCase().includes(inputElemnt.value.toUpperCase())
           ) {
             if (this.companySymbols.length < 30) {
               this.companySymbols.push(data[j].symbol);
@@ -69,14 +71,45 @@ class SearchResults {
               ) {
                 color = "green";
               }
-              this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${fullCompData.companyProfiles[i].symbol}" class="link-primary list-group-item"> <img src="${fullCompData.companyProfiles[i].profile.image}" alt="Logo"><span class = "comp-name">${fullCompData.companyProfiles[i].profile.companyName},(${fullCompData.companyProfiles[i].symbol})</span><span class = "list-price">$${fullCompData.companyProfiles[i].profile.price}</span> <span class = ${color}>${fullCompData.companyProfiles[i].profile.changesPercentage}</span></a></li>`;
+
+              this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${
+                fullCompData.companyProfiles[i].symbol
+              }" class="link-primary list-group-item"> <img src="${
+                fullCompData.companyProfiles[i].profile.image
+              }" alt="Logo"><span class = "comp-name">${this.addYellow(
+                fullCompData.companyProfiles[
+                  i
+                ].profile.companyName.toUpperCase(),
+                inputElemnt.value.toUpperCase()
+              )},(${this.addYellow(
+                fullCompData.companyProfiles[i].symbol.toUpperCase(),
+                inputElemnt.value.toUpperCase()
+              )})</span><span class = "list-price">$${
+                fullCompData.companyProfiles[i].profile.price
+              }</span> <span class = ${color}>${
+                fullCompData.companyProfiles[i].profile.changesPercentage
+              }</span></a></li>`;
             }
           } else {
             let color = "red";
             if (fullCompData.profile.changesPercentage[1] == "+") {
               color = "green";
             }
-            this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${fullCompData.symbol}" class="link-primary list-group-item"> <img src="${fullCompData.profile.image}" alt="Logo"><span class = "comp-name">${fullCompData.profile.companyName},(${fullCompData.symbol})</span><span class = "list-price">$${fullCompData.profile.price}</span> <span class = ${color}>${fullCompData.profile.changesPercentage}</span></a></li>`;
+            this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${
+              fullCompData.symbol
+            }" class="link-primary list-group-item"> <img src="${
+              fullCompData.profile.image
+            }" alt="Logo"><span class = "comp-name">${this.addYellow(
+              fullCompData.profile.companyName.toUpperCase(),
+              inputElemnt.value.toUpperCase()
+            )},(${this.addYellow(
+              fullCompData.symbol.toUpperCase(),
+              inputElemnt.value.toUpperCase()
+            )})</span><span class = "list-price">$${
+              fullCompData.profile.price
+            }</span> <span class = ${color}>${
+              fullCompData.profile.changesPercentage
+            }</span></a></li>`;
           }
         });
       }
@@ -84,5 +117,22 @@ class SearchResults {
       spinner.classList.add("d-none");
       this.perent.appendChild(this.ul);
     });
+  }
+
+  addYellow(string, inputValue) {
+    let newString = string.split("");
+    console.log(newString);
+    console.log(inputValue);
+    for (let i = 0; i < inputValue.length; i++) {
+      if (newString[i] == inputValue[i]) {
+        newString.splice(
+          i,
+          1,
+          `<span class = "yellow">` + newString[i] + "</span>"
+        );
+      }
+    }
+    newString = newString.join("");
+    return newString;
   }
 }
