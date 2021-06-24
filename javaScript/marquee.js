@@ -1,9 +1,11 @@
 class Marquee {
   constructor(element) {
-    this.element = document.createElement(element);
+    this.divElement = document.createElement("div");
+    this.divElement.classList.add("marquee-div");
+    this.perent = element;
   }
   addToClassList(className) {
-    this.element.classList.add(className);
+    this.divElement.classList.add(className);
   }
   async getSymbols() {
     const res = await fetch(
@@ -28,12 +30,10 @@ class Marquee {
     this.getSymbols().then((data) => {
       this.getCompInfo(data).then((d) => {
         for (let i = 0; i < d.companyProfiles.length; i++) {
-          this.element.innerHTML += `<span class = "marquee-item">${d.companyProfiles[i].symbol} <span class = "green">$${d.companyProfiles[i].profile.price}</span></span>`;
+          this.divElement.innerHTML += `<span class = "marquee-item">${d.companyProfiles[i].symbol} <span class = "green">$${d.companyProfiles[i].profile.price}</span></span>`;
         }
+        this.perent.appendChild(this.divElement);
       });
     });
-  }
-  appendTO(perent) {
-    perent.appendChild(this.element);
   }
 }

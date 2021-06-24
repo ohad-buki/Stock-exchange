@@ -19,26 +19,26 @@
     <div class="page-wrapper">
       <div class="marquee-container"></div>
       <div class="page-box">
-        <div class="h1-wrapper">Search NASDAQ Stocks</div>
-        <div class="input-group">
-          <input
-            type="search"
-            class="form-control rounded"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="search-addon"
-          />
-          <button type="button" class="btn">search</button>
-        </div>
-        <div class="spinner-wrapper">
-          <div class="spinner-border d-none" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
         <div class="search-results col"></div>
       </div>
     </div>
+    <script src="./javaScript/form.js"></script>
     <script src="./javaScript/marquee.js"></script>
     <script src="./javaScript/index.js"></script>
+    <script src="./javaScript/results.js"></script>
+    <script>
+      // marquee render
+      const marqueeMain = new Marquee(
+        document.querySelector(".marquee-container")
+      );
+      marqueeMain.addInnerHTML();
+      // form & results render
+      const pageBox = document.querySelector(".page-box");
+      const resultsHTML = document.querySelector(".search-results");
+      const form = new Forminput(pageBox);
+      const resultList = new SearchResults(resultsHTML);
+      form.onSearch((value, spinner) => resultList.addToScreen(value, spinner));
+      pageBox.insertBefore(form.element, resultsHTML);
+    </script>
   </body>
 </html>
