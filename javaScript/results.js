@@ -31,14 +31,14 @@ class SearchResults {
         }
         this.getCompData(this.companySymbols).then((fullCompData) => {
           for (let j = 0; j < 10; j++) {
-            let color = "red";
-            if (
-              fullCompData.companyProfiles[j].profile.changesPercentage[1] ==
-              "+"
-            ) {
-              color = "green";
-            }
-            this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${fullCompData.companyProfiles[j].symbol}" class="link-primary list-group-item"> <img src="${fullCompData.companyProfiles[j].profile.image}" alt="Logo"><span class = "comp-name">${fullCompData.companyProfiles[j].profile.companyName},(${fullCompData.companyProfiles[j].symbol})</span><span class = "list-price">$${fullCompData.companyProfiles[j].profile.price}</span> <span class = ${color}>${fullCompData.companyProfiles[j].profile.changesPercentage}</span></a></li>`;
+            this.insertHTML(
+              this.ul,
+              fullCompData.companyProfiles[j],
+              inputElemnt.value,
+              this.getColor(
+                fullCompData.companyProfiles[j].profile.changesPercentage
+              )
+            );
           }
         });
       } else {
@@ -64,65 +64,42 @@ class SearchResults {
           }
           if (fullCompData.companyProfiles) {
             for (let i = 0; i < 10; i++) {
-              let color = "red";
-              if (
-                fullCompData.companyProfiles[i].profile.changesPercentage[1] ==
-                "+"
-              ) {
-                color = "green";
-              }
-
-              this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${
-                fullCompData.companyProfiles[i].symbol
-              }" class="link-primary list-group-item"> <img src="${
-                fullCompData.companyProfiles[i].profile.image
-              }" alt="Logo"><span class = "comp-name">${this.addYellow(
-                fullCompData.companyProfiles[
-                  i
-                ].profile.companyName.toUpperCase(),
-                inputElemnt.value.toUpperCase()
-              )},(${this.addYellow(
-                fullCompData.companyProfiles[i].symbol.toUpperCase(),
-                inputElemnt.value.toUpperCase()
-              )})</span><span class = "list-price">$${
-                fullCompData.companyProfiles[i].profile.price
-              }</span> <span class = ${color}>${
-                fullCompData.companyProfiles[i].profile.changesPercentage
-              }</span></a></li>`;
+              this.insertHTML(
+                this.ul,
+                fullCompData.companyProfiles[i],
+                inputElemnt.value,
+                this.getColor(
+                  fullCompData.companyProfiles[i].profile.changesPercentage
+                )
+              );
             }
           } else {
-            let color = "red";
-            if (fullCompData.profile.changesPercentage[1] == "+") {
-              color = "green";
-            }
-            this.ul.innerHTML += `<li><a href="./html/company.html?symbol=${
-              fullCompData.symbol
-            }" class="link-primary list-group-item"> <img src="${
-              fullCompData.profile.image
-            }" alt="Logo"><span class = "comp-name">${this.addYellow(
-              fullCompData.profile.companyName.toUpperCase(),
-              inputElemnt.value.toUpperCase()
-            )},(${this.addYellow(
-              fullCompData.symbol.toUpperCase(),
-              inputElemnt.value.toUpperCase()
-            )})</span><span class = "list-price">$${
-              fullCompData.profile.price
-            }</span> <span class = ${color}>${
-              fullCompData.profile.changesPercentage
-            }</span></a></li>`;
+            this.insertHTML(
+              this.ul,
+              fullCompData,
+              inputElemnt.value,
+              this.getColor(fullCompData.profile.changesPercentage)
+            );
           }
         });
       }
       this.companySymbols = [];
       spinner.classList.add("d-none");
       this.perent.appendChild(this.ul);
+      this.onClick();
     });
+  }
+
+  getColor(changesPercentage) {
+    let color = "red";
+    if (changesPercentage[1] == "+") {
+      color = "green";
+    }
+    return color;
   }
 
   addYellow(string, inputValue) {
     let newString = string.split("");
-    console.log(newString);
-    console.log(inputValue);
     for (let i = 0; i < inputValue.length; i++) {
       if (newString[i] == inputValue[i]) {
         newString.splice(
@@ -134,5 +111,31 @@ class SearchResults {
     }
     newString = newString.join("");
     return newString;
+  }
+
+  insertHTML(perent, responseObj, inputValue, color) {
+    let compName = this.addYellow(
+      responseObj.profile.companyName.toUpperCase(),
+      inputValue.toUpperCase()
+    );
+    let compSymbol = this.addYellow(
+      responseObj.symbol.toUpperCase(),
+      inputValue.toUpperCase()
+    );
+    if (inputValue == "") {
+      compName = responseObj.profile.companyName;
+      compSymbol = responseObj.symbol;
+    }
+    perent.innerHTML += `<li><a href="./html/company.html?symbol=${responseObj.symbol}" class="link-primary"> <img src="${responseObj.profile.image}" alt="Logo"><span class = "comp-name">${compName},(${compSymbol})</span><span class = "list-price">$${responseObj.profile.price}</span> <span class = ${color}>${responseObj.profile.changesPercentage}</span></a><button value = "${responseObj.symbol}" type = "button" class = "btn compare">Compare</button></li>`;
+  }
+
+  onClick() {
+    this.ul.addEventListener("click", (e) => {
+      if (e.target.classList.contains("compare")) {
+        this.getCompData(e.target.value).then(function (data) {
+          console.log(data);
+        });
+      }
+    });
   }
 }
