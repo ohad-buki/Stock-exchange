@@ -14,30 +14,18 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="page-wrapper">
-      <div class="page-box">
-        <div class="spinner-wrapper">
-          <div class="spinner-border first-spinner d-none" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-        <div class="header">
-          <div class="logo"></div>
-          <div class="name"></div>
-        </div>
-        <div class="price"><span class="percent"></span></div>
-        <div class="discription"></div>
-        <div class="char">
-          <div class="spinner-wrapper">
-            <div class="spinner-border history-spinner d-none" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-          <canvas id="myChart"></canvas>
-        </div>
-      </div>
-    </div>
+    <div class="page-wrapper"></div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../javaScript/company.js"></script>
+    <script>
+      const urlPage = new URLSearchParams(window.location.search);
+      const companyS = urlPage.get("symbol");
+      const compInfo = new CompanyInfo(
+        document.querySelector(".page-wrapper"),
+        companyS
+      );
+      compInfo.addDataToScreen();
+      compInfo.fillChar();
+    </script>
   </body>
 </html>

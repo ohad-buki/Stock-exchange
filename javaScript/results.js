@@ -21,68 +21,55 @@ class SearchResults {
     return compData;
   }
 
+  getCorrectComp(data, inputElemnt) {
+    if (inputElemnt.value == "") {
+      for (let i = 0; i <= 10; i++) {
+        this.companySymbols.push(this.getCompData(data[i].symbol));
+      }
+    } else {
+      for (let j = 0; j < data.length; j++) {
+        if (data[j].name == null) {
+          continue;
+        }
+        if (
+          data[j].symbol
+            .toUpperCase()
+            .includes(inputElemnt.value.toUpperCase()) ||
+          data[j].name.toUpperCase().includes(inputElemnt.value.toUpperCase())
+        ) {
+          if (this.companySymbols.length < 11) {
+            this.companySymbols.push(this.getCompData(data[j].symbol));
+          }
+        }
+      }
+    }
+  }
+
   addToScreen(inputElemnt, spinner) {
+    console.log("lala");
     spinner.classList.remove("d-none");
     this.ul.innerHTML = "";
     this.getResults().then((data) => {
-      if (inputElemnt.value == "") {
-        for (let i = 0; i <= 10; i++) {
-          this.companySymbols.push(data[i].symbol);
-        }
-        this.getCompData(this.companySymbols).then((fullCompData) => {
-          for (let j = 0; j < 10; j++) {
-            this.insertHTML(
-              this.ul,
-              fullCompData.companyProfiles[j],
-              inputElemnt.value,
-              this.getColor(
-                fullCompData.companyProfiles[j].profile.changesPercentage
-              )
-            );
-          }
-        });
-      } else {
-        for (let j = 0; j < data.length; j++) {
-          if (data[j].name == null) {
-            continue;
-          }
-          if (
-            data[j].symbol
-              .toUpperCase()
-              .includes(inputElemnt.value.toUpperCase()) ||
-            data[j].name.toUpperCase().includes(inputElemnt.value.toUpperCase())
-          ) {
-            if (this.companySymbols.length < 30) {
-              this.companySymbols.push(data[j].symbol);
-            }
-          }
-        }
-        this.getCompData(this.companySymbols).then((fullCompData) => {
-          if (fullCompData.status == 404) {
+      console.log("lala");
+      this.getCorrectComp(data, inputElemnt);
+      console.log(this.companySymbols);
+      Promise.all(this.companySymbols).then((fullCompData) => {
+        console.log(fullCompData);
+        for (let i = 0; i < fullCompData.length; i++) {
+          console.log(fullCompData);
+          if (fullCompData[i].status == 404) {
             this.ul.innerHTML = `<li>No Match</li>`;
             return;
-          }
-          if (fullCompData.companyProfiles) {
-            for (let i = 0; i < 10; i++) {
-              this.insertHTML(
-                this.ul,
-                fullCompData.companyProfiles[i],
-                inputElemnt.value,
-                this.getColor(
-                  fullCompData.companyProfiles[i].profile.changesPercentage
-                )
-              );
-            }
           } else {
             this.insertHTML(
               this.ul,
-              fullCompData,
+              fullCompData[i],
               inputElemnt.value,
-              this.getColor(fullCompData.profile.changesPercentage)
+              this.getColor(fullCompData[i].profile.changesPercentage)
             );
           }
-        });
-      }
+        }
+      });
       this.companySymbols = [];
       spinner.classList.add("d-none");
       this.perent.appendChild(this.ul);

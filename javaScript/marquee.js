@@ -14,7 +14,7 @@ class Marquee {
     const data = res.json();
     const dataObjects = await data;
     const symbolArray = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < dataObjects.length; i++) {
       symbolArray.push(dataObjects[i].symbol);
     }
     return symbolArray;
@@ -28,9 +28,13 @@ class Marquee {
   }
   addInnerHTML() {
     this.getSymbols().then((data) => {
-      this.getCompInfo(data).then((d) => {
-        for (let i = 0; i < d.companyProfiles.length; i++) {
-          this.divElement.innerHTML += `<span class = "marquee-item">${d.companyProfiles[i].symbol} <span class = "green">$${d.companyProfiles[i].profile.price}</span></span>`;
+      const arrayOfPromises = [];
+      for (let i = 0; i < data.length; i++) {
+        arrayOfPromises.push(this.getCompInfo(data[i]));
+      }
+      Promise.all(arrayOfPromises).then((d) => {
+        for (let j = 0; j < d.length; j++) {
+          this.divElement.innerHTML += `<span class = "marquee-item">${d[j].symbol} <span class = "green">$${d[j].profile.price}</span></span>`;
         }
         this.perent.appendChild(this.divElement);
       });
