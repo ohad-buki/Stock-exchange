@@ -68,6 +68,31 @@ body {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.compare-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 15px;
+  background-color: rgb(218, 218, 218);
+  width: 100%;
+  padding: 0.6rem 1rem;
+}
+
+.compareAllBtn {
+  border-left: solid 1px #394032;
+  padding-left: 0.6rem;
+  cursor: pointer;
+}
+
+.listOfSymbols {
+  width: 90%;
+}
+
+.compareAllBtn:hover {
+  font-weight: bold;
+}
+
 .h1-wrapper {
   width: 100%;
   text-align: center;
@@ -189,6 +214,13 @@ a {
 
 .red {
   color: red;
+}
+
+.compareBtn {
+  background-color: tomato;
+  color: black;
+  border: none;
+  margin: 0 3px;
 }
 
 .yellow {

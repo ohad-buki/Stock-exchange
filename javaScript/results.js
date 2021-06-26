@@ -73,7 +73,6 @@ class SearchResults {
       this.companySymbols = [];
       spinner.classList.add("d-none");
       this.perent.appendChild(this.ul);
-      this.onClick();
     });
   }
 
@@ -116,11 +115,17 @@ class SearchResults {
     perent.innerHTML += `<li><a href="./html/company.html?symbol=${responseObj.symbol}" class="link-primary"> <img src="${responseObj.profile.image}" alt="Logo"><span class = "comp-name">${compName},(${compSymbol})</span><span class = "list-price">$${responseObj.profile.price}</span> <span class = ${color}>${responseObj.profile.changesPercentage}</span></a><button value = "${responseObj.symbol}" type = "button" class = "btn compare">Compare</button></li>`;
   }
 
-  onClick() {
+  onClick(compareList) {
     this.ul.addEventListener("click", (e) => {
       if (e.target.classList.contains("compare")) {
         this.getCompData(e.target.value).then(function (data) {
           console.log(data);
+          console.log(compareList);
+          const compareBtn = document.createElement("button");
+          compareBtn.setAttribute("type", "button");
+          compareBtn.classList.add("btn", "compareBtn");
+          compareBtn.innerHTML = `${data.symbol} <b>X</b>`;
+          compareList.appendChild(compareBtn);
         });
       }
     });
