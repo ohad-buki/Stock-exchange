@@ -1,5 +1,6 @@
 class Forminput {
   constructor(perentElement) {
+    this.symbolArray = [];
     this.perent = perentElement;
     this.element = document.createElement("div");
     this.inputElemnt = document.createElement("input");
@@ -8,6 +9,8 @@ class Forminput {
     this.spinner = document.createElement("div");
     this.compare = document.createElement("div");
     this.compareList = document.createElement("div");
+    this.compareAllBtn = document.createElement("div");
+    this.compareAllBtn.classList.add("compareAllBtn");
     this.compareList.classList.add("listOfSymbols");
     this.compare.classList.add("compare-list");
     this.buttonElement.innerHTML = `search`;
@@ -16,17 +19,30 @@ class Forminput {
     this.spinner.classList.add("spinner-wrapper");
     this.spinner.innerHTML = `<div class="spinner-border d-none" role="status">
     <span class="visually-hidden">Loading...</span></div>`;
-    this.compare.innerHTML = `<div class = "compareAllBtn">Compare</div>`;
-    this.compare.addEventListener("click", (e) => {});
+    this.compare.appendChild(this.compareAllBtn);
+    this.compare.addEventListener("click", (e) => {
+      if (e.target.type == "button") {
+        e.target.classList.add("d-none");
+        for (let i = 0; i < this.symbolArray.length; i++) {
+          if (e.target.value == this.symbolArray[i]) {
+            this.symbolArray.splice(i, 1);
+          }
+        }
+        if (this.symbolArray.length == 0) {
+          this.compareAllBtn.innerHTML = "";
+        }
+        this.compareAllBtn.innerHTML = `<a href="./html/company.html?symbol=${this.symbolArray}">Compare</a>`;
+      }
+    });
     this.compare.insertBefore(this.compareList, this.compare.firstChild);
     setAttributes(buttonAtt, this.buttonElement);
     setAttributes(inputAtt, this.inputElemnt);
     this.element.classList.add("input-group");
     this.element.append(this.inputElemnt, this.buttonElement, this.spinner);
+    this.perent.appendChild(this.compare);
     this.perent.appendChild(this.header);
     this.perent.insertBefore(this.header, this.perent.firstChild);
     this.perent.appendChild(this.element);
-    this.perent.appendChild(this.compare);
     this.perent.insertBefore(this.compare, this.header);
   }
 
@@ -43,7 +59,7 @@ class Forminput {
   }
 
   addToCompare(callback) {
-    callback(this.compareList);
+    callback(this.compareList, this.symbolArray, this.compareAllBtn);
   }
 
   addClass(elementClass, inputElemntClass, buttonClass) {
@@ -61,6 +77,7 @@ class Forminput {
     this.inputElemnt.innerHTML += inputElemntInnerHTML;
     this.buttonElement.innerHTML += buttonInnerHTML;
   }
+
   debounce(func, timeout = 400) {
     let timer;
     return (...args) => {

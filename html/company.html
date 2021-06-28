@@ -15,17 +15,38 @@
   </head>
   <body>
     <div class="page-wrapper"></div>
+    <div class="char">
+      <div class="spinner-wrapper">
+        <div class="spinner-border history-spinner d-none" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <canvas id="myChart"></canvas>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../javaScript/company.js"></script>
     <script>
       const urlPage = new URLSearchParams(window.location.search);
       const companyS = urlPage.get("symbol");
-      const compInfo = new CompanyInfo(
-        document.querySelector(".page-wrapper"),
-        companyS
-      );
-      compInfo.addDataToScreen();
-      compInfo.fillChar();
+      const companysArray = companyS.split(",");
+      let compInfo = [];
+      if (companysArray.length > 1) {
+        for (let i = 0; i < companysArray.length; i++) {
+          compInfo[i] = new CompanyInfo(
+            document.querySelector(".page-wrapper"),
+            companysArray[i]
+          );
+          compInfo[i].addDataToScreen();
+          compInfo[i].fillChar(companysArray);
+        }
+      } else {
+        const compInfo = new CompanyInfo(
+          document.querySelector(".page-wrapper"),
+          companyS
+        );
+        compInfo.addDataToScreen();
+        compInfo.fillChar(companysArray);
+      }
     </script>
   </body>
 </html>

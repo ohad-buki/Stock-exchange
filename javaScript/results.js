@@ -46,17 +46,12 @@ class SearchResults {
   }
 
   addToScreen(inputElemnt, spinner) {
-    console.log("lala");
     spinner.classList.remove("d-none");
     this.ul.innerHTML = "";
     this.getResults().then((data) => {
-      console.log("lala");
       this.getCorrectComp(data, inputElemnt);
-      console.log(this.companySymbols);
       Promise.all(this.companySymbols).then((fullCompData) => {
-        console.log(fullCompData);
         for (let i = 0; i < fullCompData.length; i++) {
-          console.log(fullCompData);
           if (fullCompData[i].status == 404) {
             this.ul.innerHTML = `<li>No Match</li>`;
             return;
@@ -115,17 +110,20 @@ class SearchResults {
     perent.innerHTML += `<li><a href="./html/company.html?symbol=${responseObj.symbol}" class="link-primary"> <img src="${responseObj.profile.image}" alt="Logo"><span class = "comp-name">${compName},(${compSymbol})</span><span class = "list-price">$${responseObj.profile.price}</span> <span class = ${color}>${responseObj.profile.changesPercentage}</span></a><button value = "${responseObj.symbol}" type = "button" class = "btn compare">Compare</button></li>`;
   }
 
-  onClick(compareList) {
+  onClick(compareList, symbolArray, compareAllBtn) {
     this.ul.addEventListener("click", (e) => {
       if (e.target.classList.contains("compare")) {
         this.getCompData(e.target.value).then(function (data) {
-          console.log(data);
-          console.log(compareList);
-          const compareBtn = document.createElement("button");
-          compareBtn.setAttribute("type", "button");
-          compareBtn.classList.add("btn", "compareBtn");
-          compareBtn.innerHTML = `${data.symbol} <b>X</b>`;
-          compareList.appendChild(compareBtn);
+          if (symbolArray.length < 3) {
+            const compareBtn = document.createElement("button");
+            compareBtn.setAttribute("type", "button");
+            compareBtn.setAttribute("value", `${data.symbol}`);
+            compareBtn.classList.add("btn", "compareBtn");
+            compareBtn.innerHTML = `${data.symbol} X`;
+            compareList.appendChild(compareBtn);
+            symbolArray.push(`${data.symbol}`);
+          }
+          compareAllBtn.innerHTML = `<a href="./html/company.html?symbol=${symbolArray}">Compare</a>`;
         });
       }
     });

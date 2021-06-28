@@ -38,7 +38,9 @@
       const resultList = new SearchResults(resultsHTML);
       form.onSearch((value, spinner) => resultList.addToScreen(value, spinner));
       pageBox.insertBefore(form.element, resultsHTML);
-      form.addToCompare((compareList) => resultList.onClick(compareList));
+      form.addToCompare((compareList, symbolArray, compareAllBtn) =>
+        resultList.onClick(compareList, symbolArray, compareAllBtn)
+      );
     </script>
   </body>
 </html>
