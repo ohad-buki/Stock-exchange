@@ -28,61 +28,77 @@ class CompanyInfo {
     return dataHistory;
   }
 
-  addDataToScreen() {
+  static arrayOfSymbolsLocal = [];
+
+  addDataToScreen(arrayOfSymbolsImport) {
     this.firstSpinner.classList.remove("d-none");
-    this.getCompanyData().then((data) => {
-      let color = "red";
-      if (data.profile.changesPercentage[1] == "+") {
-        color = "green";
-      }
-      this.perent.innerHTML += `<div class="page-box">
-      <div class="spinner-wrapper">
-        <div class="spinner-border first-spinner d-none" role="status">
-          <span class="visually-hidden">Loading...</span>
+    CompanyInfo.arrayOfSymbolsLocal.push(this.getCompanyData());
+    if (CompanyInfo.arrayOfSymbolsLocal.length == arrayOfSymbolsImport.length) {
+      Promise.all(CompanyInfo.arrayOfSymbolsLocal).then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          let color = "red";
+          if (data[i].profile.changesPercentage[1] == "+") {
+            color = "green";
+          }
+          this.perent.innerHTML += `<div class="page-box">
+          <div class="spinner-wrapper">
+            <div class="spinner-border first-spinner d-none" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div class="header">
+            <div class="logo"><img src="${data[i].profile.image}" alt="Logo"></div>
+            <div class="name">${data[i].profile.companyName} (${data[i].profile.industry})</div>
+          </div>
+          <div class="price">Stock price: $${data[i].profile.price} <span class = ${color}>${data[i].profile.changesPercentage}</span></div>
+          <div class="discription">${data[i].profile.description}</div>
         </div>
-      </div>
-      <div class="header">
-        <div class="logo"><img src="${data.profile.image}" alt="Logo"></div>
-        <div class="name">${data.profile.companyName} (${data.profile.industry})</div>
-      </div>
-      <div class="price">Stock price: $${data.profile.price} <span class = ${color}>${data.profile.changesPercentage}</span></div>
-      <div class="discription">${data.profile.description}</div>
-    </div>
-    `;
-      this.firstSpinner.classList.add("d-none");
-    });
+        `;
+        }
+        this.firstSpinner.classList.add("d-none");
+      });
+    }
   }
 
   static labels = [];
   static priceHistory = [];
+  static arrayOfHistoryPromises = [];
 
   fillChar(symbolsArray) {
     const secondSpinner = document.querySelector(".history-spinner");
     secondSpinner.classList.remove("d-none");
-    const localLabels = [];
-    const localPriceHistory = [];
-    this.getHistory().then((charData) => {
-      this.getPriceHistoryAndLabels(localLabels, localPriceHistory, charData);
-      const data = {
-        labels: CompanyInfo.labels[CompanyInfo.labels.length - 1],
-        datasets: this.createCharDataSet(symbolsArray),
-      };
-      const config = {
-        type: "line",
-        data,
-        options: {},
-      };
-      secondSpinner.classList.add("d-none");
-      this.getAddCharToScreen(config, symbolsArray);
-    });
+    CompanyInfo.arrayOfHistoryPromises.push(this.getHistory());
+    if (CompanyInfo.arrayOfHistoryPromises.length == symbolsArray.length) {
+      Promise.all(CompanyInfo.arrayOfHistoryPromises).then((charData) => {
+        for (let i = 0; i < charData.length; i++) {
+          const localLabels = [];
+          const localPriceHistory = [];
+          this.getPriceHistoryAndLabels(
+            localLabels,
+            localPriceHistory,
+            charData[i]
+          );
+          const data = {
+            labels: CompanyInfo.labels[0],
+            datasets: this.createCharDataSet(symbolsArray),
+          };
+          const config = {
+            type: "line",
+            data,
+            options: {},
+          };
+          secondSpinner.classList.add("d-none");
+          this.getAddCharToScreen(config, symbolsArray);
+        }
+      });
+    }
   }
 
   createCharDataSet(symbolsArray) {
     let dataSetArray = [];
-    console.log(CompanyInfo.priceHistory);
     for (let i = 0; i < CompanyInfo.labels.length; i++) {
       dataSetArray.push({
-        label: `${symbolsArray[i]} Price History`,
+        label: `${CompanyInfo.labels[i][0]} Price History`,
         backgroundColor: this.arrayOfColors[i],
         borderColor: this.arrayOfColors[i],
         data: CompanyInfo.priceHistory[i].slice(
@@ -98,16 +114,19 @@ class CompanyInfo {
       localLabels.unshift(d.historical[i].date);
       localPriceHistory.unshift(d.historical[i].close);
     }
-    localLabels.sort((a, b) => {
-      return Math.abs(Date.parse(a)) - Math.abs(Date.parse(b));
-    });
-    CompanyInfo.priceHistory.push(localPriceHistory);
+    localLabels.unshift(d.symbol);
+    console.log(localLabels);
+    CompanyInfo.priceHistory.unshift(localPriceHistory);
     CompanyInfo.labels.unshift(localLabels);
     if (CompanyInfo.labels.length > 1) {
       CompanyInfo.labels.sort((a, b) => {
-        return a[0] - b[0];
+        return a.length - b.length;
+      });
+      CompanyInfo.priceHistory.sort((a, b) => {
+        return a.length - b.length;
       });
     }
+    console.log(CompanyInfo.labels);
   }
 
   getAddCharToScreen(config, symbolsArray) {

@@ -58,10 +58,15 @@ body {
   margin: 0;
 }
 
+.compWrapper {
+  align-items: flex-start;
+}
+
 .page-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   margin-top: 70px;
   width: 65%;
   padding: 1rem;
