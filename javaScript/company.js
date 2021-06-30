@@ -79,7 +79,10 @@ class CompanyInfo {
             charData[i]
           );
           const data = {
-            labels: CompanyInfo.labels[0],
+            labels: CompanyInfo.labels[0].slice(
+              1,
+              CompanyInfo.labels[0].length
+            ),
             datasets: this.createCharDataSet(symbolsArray),
           };
           const config = {
@@ -97,6 +100,7 @@ class CompanyInfo {
   createCharDataSet(symbolsArray) {
     let dataSetArray = [];
     for (let i = 0; i < CompanyInfo.labels.length; i++) {
+      console.log(CompanyInfo.labels[i]);
       dataSetArray.push({
         label: `${CompanyInfo.labels[i][0]} Price History`,
         backgroundColor: this.arrayOfColors[i],
@@ -105,6 +109,7 @@ class CompanyInfo {
           -1 * CompanyInfo.priceHistory[0].length
         ),
       });
+      console.log(CompanyInfo.labels[i]);
     }
     return dataSetArray;
   }
@@ -115,7 +120,6 @@ class CompanyInfo {
       localPriceHistory.unshift(d.historical[i].close);
     }
     localLabels.unshift(d.symbol);
-    console.log(localLabels);
     CompanyInfo.priceHistory.unshift(localPriceHistory);
     CompanyInfo.labels.unshift(localLabels);
     if (CompanyInfo.labels.length > 1) {
@@ -126,7 +130,6 @@ class CompanyInfo {
         return a.length - b.length;
       });
     }
-    console.log(CompanyInfo.labels);
   }
 
   getAddCharToScreen(config, symbolsArray) {
