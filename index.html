@@ -35,9 +35,14 @@
       const pageBox = document.querySelector(".page-box");
       const resultsHTML = document.querySelector(".search-results");
       const form = new Forminput(pageBox);
+      const urlPageOnLoad = new URL(window.location);
       const resultList = new SearchResults(resultsHTML);
       form.onSearch((value, spinner) => resultList.addToScreen(value, spinner));
       pageBox.insertBefore(form.element, resultsHTML);
+      form.inputElemnt.value = urlPageOnLoad.searchParams.get("query");
+      window.onload = () => {
+        resultList.addToScreen(form.inputElemnt, form.spinner);
+      };
       form.addToCompare((compareList, symbolArray, compareAllBtn) =>
         resultList.onClick(compareList, symbolArray, compareAllBtn)
       );

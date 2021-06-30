@@ -16,6 +16,7 @@ body {
   position: absolute;
   height: 50px;
   background-color: #394032;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .marquee-div {
@@ -27,6 +28,10 @@ body {
   height: 50px;
   animation: slide 42s linear infinite;
   transform: translateX(100%);
+}
+
+.marquee-div:hover {
+  animation-play-state: paused;
 }
 
 @keyframes slide {
@@ -66,7 +71,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   margin-top: 70px;
   width: 65%;
   padding: 1rem;
@@ -117,7 +121,7 @@ body {
 
 .btn {
   border: black 1px solid;
-  background-color: white;
+  /* background-color: white; */
   color: gray;
 }
 
@@ -209,16 +213,24 @@ a {
   font-size: 20px;
 }
 
-.char {
-  margin: 2rem 1rem 0 1rem;
-}
-
 .green {
   color: #00c736;
 }
 
 .red {
   color: red;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 20px;
+  width: 100%;
+  height: 44px;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .compareBtn {

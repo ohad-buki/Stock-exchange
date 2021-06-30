@@ -7,9 +7,9 @@ class CompanyInfo {
     this.firstSpinner.innerHTML = ` <div class="spinner-border first-spinner d-none" role="status">
     <span class="visually-hidden">Loading...</span></div>`;
     this.arrayOfColors = [
-      `rgb(226, 99, 132)`,
-      `rgb(193, 63, 199)`,
-      `rgb(150, 55, 73)`,
+      `rgb(${getRandColor()}, ${getRandColor()}, ${getRandColor()})`,
+      `rgb(${getRandColor()}, ${getRandColor()}, ${getRandColor()})`,
+      `rgb(${getRandColor()}, ${getRandColor()}, ${getRandColor()})`,
     ];
   }
   async getCompanyData() {
@@ -52,6 +52,7 @@ class CompanyInfo {
           </div>
           <div class="price">Stock price: $${data[i].profile.price} <span class = ${color}>${data[i].profile.changesPercentage}</span></div>
           <div class="discription">${data[i].profile.description}</div>
+          <a href = ${data[i].profile.website} target="_blank">${data[i].profile.website}</a>
         </div>
         `;
         }
@@ -100,7 +101,6 @@ class CompanyInfo {
   createCharDataSet(symbolsArray) {
     let dataSetArray = [];
     for (let i = 0; i < CompanyInfo.labels.length; i++) {
-      console.log(CompanyInfo.labels[i]);
       dataSetArray.push({
         label: `${CompanyInfo.labels[i][0]} Price History`,
         backgroundColor: this.arrayOfColors[i],
@@ -109,13 +109,12 @@ class CompanyInfo {
           -1 * CompanyInfo.priceHistory[0].length
         ),
       });
-      console.log(CompanyInfo.labels[i]);
     }
     return dataSetArray;
   }
 
   getPriceHistoryAndLabels(localLabels, localPriceHistory, d) {
-    for (let i = 0; i < d.historical.length; i += 30) {
+    for (let i = 0; i < d.historical.length; i++) {
       localLabels.unshift(d.historical[i].date);
       localPriceHistory.unshift(d.historical[i].close);
     }
@@ -141,4 +140,8 @@ class CompanyInfo {
   static addCharToScreen(config) {
     var myChart = new Chart(document.getElementById("myChart"), config);
   }
+}
+
+function getRandColor() {
+  return Math.random() * 256;
 }

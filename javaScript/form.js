@@ -54,28 +54,15 @@ class Forminput {
       "keyup",
       this.debounce(() => {
         callback(this.inputElemnt, this.spinner);
+        const urlPage = new URL(window.location);
+        urlPage.searchParams.set("query", this.inputElemnt.value);
+        history.pushState(null, null, urlPage);
       })
     );
   }
 
   addToCompare(callback) {
     callback(this.compareList, this.symbolArray, this.compareAllBtn);
-  }
-
-  addClass(elementClass, inputElemntClass, buttonClass) {
-    this.element.classList.add(elementClass);
-    this.inputElemnt.classList.add(inputElemntClass);
-    this.buttonElement.classList.add(buttonClass);
-  }
-  removeClass(elementClass, inputElemntClass, buttonClass) {
-    this.element.classList.remove(elementClass);
-    this.inputElemnt.classList.remove(inputElemntClass);
-    this.buttonElement.classList.remove(buttonClass);
-  }
-  addInnerHTML(elementInnerHTML, inputElemntInnerHTML, buttonInnerHTML) {
-    this.element.innerHTML += elementInnerHTML;
-    this.inputElemnt.innerHTML += inputElemntInnerHTML;
-    this.buttonElement.innerHTML += buttonInnerHTML;
   }
 
   debounce(func, timeout = 400) {

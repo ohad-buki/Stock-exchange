@@ -5,9 +5,9 @@ class SearchResults {
     this.perent = perentElement;
     this.companySymbols = [];
   }
-  async getResults() {
+  async getResults(s) {
     const res = await fetch(
-      "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=AA&amp;limit=10&amp;exchange=NASDAQ"
+      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${s}&limit=10&exchange=NASDAQ`
     );
     const data = await res.json();
     return data;
@@ -21,54 +21,35 @@ class SearchResults {
     return compData;
   }
 
-  getCorrectComp(data, inputElemnt) {
-    if (inputElemnt.value == "") {
-      for (let i = 0; i <= 10; i++) {
-        this.companySymbols.push(this.getCompData(data[i].symbol));
-      }
-    } else {
-      for (let j = 0; j < data.length; j++) {
-        if (data[j].name == null) {
-          continue;
-        }
-        if (
-          data[j].symbol
-            .toUpperCase()
-            .includes(inputElemnt.value.toUpperCase()) ||
-          data[j].name.toUpperCase().includes(inputElemnt.value.toUpperCase())
-        ) {
-          if (this.companySymbols.length < 11) {
-            this.companySymbols.push(this.getCompData(data[j].symbol));
-          }
-        }
-      }
-    }
-  }
-
   addToScreen(inputElemnt, spinner) {
     spinner.classList.remove("d-none");
     this.ul.innerHTML = "";
-    this.getResults().then((data) => {
-      this.getCorrectComp(data, inputElemnt);
-      Promise.all(this.companySymbols).then((fullCompData) => {
-        for (let i = 0; i < fullCompData.length; i++) {
-          if (fullCompData[i].status == 404) {
-            this.ul.innerHTML = `<li>No Match</li>`;
-            return;
-          } else {
-            this.insertHTML(
-              this.ul,
-              fullCompData[i],
-              inputElemnt.value,
-              this.getColor(fullCompData[i].profile.changesPercentage)
-            );
-          }
+    if (inputElemnt.value.length > 0) {
+      this.getResults(inputElemnt.value).then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          this.companySymbols.push(this.getCompData(data[i].symbol));
         }
+        if (this.companySymbols.length < 1) {
+          this.ul.innerHTML = `<li>No Match</li>`;
+        } else {
+          Promise.all(this.companySymbols).then((fullCompData) => {
+            for (let i = 0; i < fullCompData.length; i++) {
+              if (fullCompData[i].symbol) {
+                this.insertHTML(
+                  this.ul,
+                  fullCompData[i],
+                  inputElemnt.value,
+                  this.getColor(fullCompData[i].profile.changesPercentage)
+                );
+              }
+            }
+          });
+        }
+        this.companySymbols = [];
+        spinner.classList.add("d-none");
+        this.perent.appendChild(this.ul);
       });
-      this.companySymbols = [];
-      spinner.classList.add("d-none");
-      this.perent.appendChild(this.ul);
-    });
+    }
   }
 
   getColor(changesPercentage) {
@@ -80,18 +61,8 @@ class SearchResults {
   }
 
   addYellow(string, inputValue) {
-    let newString = string.split("");
-    for (let i = 0; i < inputValue.length; i++) {
-      if (newString[i] == inputValue[i]) {
-        newString.splice(
-          i,
-          1,
-          `<span class = "yellow">` + newString[i] + "</span>"
-        );
-      }
-    }
-    newString = newString.join("");
-    return newString;
+    var reg = new RegExp("(" + inputValue + ")", "gi");
+    return string.replace(reg, '<span class = "yellow">$1</span>');
   }
 
   insertHTML(perent, responseObj, inputValue, color) {

@@ -10,7 +10,7 @@ class Marquee {
   }
   async getSymbols() {
     const res = await fetch(
-      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/nasdaq_constituent`
+      "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/nasdaq_constituent"
     );
     const data = res.json();
     const dataObjects = await data;
@@ -28,7 +28,7 @@ class Marquee {
       const data = await res.json();
       return data;
     } catch {
-      if (this.tryingCount < 15) {
+      if (this.tryingCount < 50) {
         this.getCompInfo(symbols);
         this.tryingCount++;
       } else {
@@ -40,7 +40,7 @@ class Marquee {
   addInnerHTML() {
     this.getSymbols().then((data) => {
       const arrayOfPromises = [];
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < 30; i++) {
         arrayOfPromises.push(this.getCompInfo(data[i]));
       }
       Promise.all(arrayOfPromises).then((d) => {
