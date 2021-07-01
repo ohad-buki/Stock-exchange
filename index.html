@@ -40,9 +40,15 @@
       form.onSearch((value, spinner) => resultList.addToScreen(value, spinner));
       pageBox.insertBefore(form.element, resultsHTML);
       form.inputElemnt.value = urlPageOnLoad.searchParams.get("query");
-      window.onload = () => {
-        resultList.addToScreen(form.inputElemnt, form.spinner);
-      };
+      console.log(urlPageOnLoad.searchParams.get("query"));
+      if (
+        urlPageOnLoad.searchParams.get("query") != "" &&
+        urlPageOnLoad.searchParams.get("query") != null
+      ) {
+        window.onload = () => {
+          resultList.addToScreen(form.inputElemnt, form.spinner);
+        };
+      }
       form.addToCompare((compareList, symbolArray, compareAllBtn) =>
         resultList.onClick(compareList, symbolArray, compareAllBtn)
       );

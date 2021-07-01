@@ -24,7 +24,7 @@ class SearchResults {
   addToScreen(inputElemnt, spinner) {
     spinner.classList.remove("d-none");
     this.ul.innerHTML = "";
-    if (inputElemnt.value.length > 0) {
+    if (inputElemnt.value.length >= 0) {
       this.getResults(inputElemnt.value).then((data) => {
         for (let i = 0; i < data.length; i++) {
           this.companySymbols.push(this.getCompData(data[i].symbol));
